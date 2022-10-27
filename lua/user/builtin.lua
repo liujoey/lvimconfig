@@ -749,15 +749,6 @@ M.lsp_on_attach_callback = function(client, _)
         d = { "<cmd>lua require('swenv.api').get_current_venv()<cr>", "Show Env" },
       }
     end
-  elseif client.name == "jsonls" then
-    if lvim.builtin.web_programming.active then
-      mappings["ls"] = { "<cmd>lua require('package-info').show()<cr>", "Show pkg info" }
-      mappings["lc"] = { "<cmd>lua require('package-info').hide()<cr>", "Hide pkg info" }
-      mappings["lu"] = { "<cmd>lua require('package-info').update()<cr>", "Update dependency" }
-      mappings["ld"] = { "<cmd>lua require('package-info').delete()<cr>", "Delete dependency" }
-      mappings["li"] = { "<cmd>lua require('package-info').install()<cr>", "Install dependency" }
-      mappings["lC"] = { "<cmd>lua require('package-info').change_version()<cr>", "Change Version" }
-    end
   end
   which_key.register(mappings, opts)
 end
