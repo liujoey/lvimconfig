@@ -56,7 +56,7 @@ end
 -- cd ~/.config/lvim/vscode-java-test
 -- npm install
 -- npm run build-plugin
-local extra_bundles = vim.split(vim.fn.glob(home .. "/.local/share/nvim/mason/packages/java-test/extension/server/*.jar"), "\n")
+local extra_bundles = vim.split(vim.fn.glob(home .. "/.local/share/nvim/mason/packages/java-test/extension/server/*.jar", 1), "\n")
 if #extra_bundles == 0 then
   extra_bundles = vim.fn.glob(home .. "/.local/share/nvim/mason/packages/java-test/extension/server/*.jar", 1, 1)
 end
