@@ -7,6 +7,12 @@ M.config = function()
   end
   lvim.plugins = {
     { "sainnhe/edge" },
+    {
+      "voldikss/vim-floaterm",
+      config = function ()
+        require("user.terminal").config()
+      end
+    },
     -- Time based themes
     -- ================================================
     -- {
