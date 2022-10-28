@@ -43,6 +43,7 @@ M.config = function()
     end,
 
     mode = "buffers",
+    numbers = "ordinal",
     sort_by = "insert_after_current",
     always_show_bufferline = false,
     groups = {
