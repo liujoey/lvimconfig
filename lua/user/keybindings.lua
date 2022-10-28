@@ -58,7 +58,7 @@ local function set_bufferline_keymaps()
     ["7"] = { "<Cmd>BufferLineGoToBuffer 7<CR>", "goto 7" },
     ["8"] = { "<Cmd>BufferLineGoToBuffer 8<CR>", "goto 8" },
     ["9"] = { "<Cmd>BufferLineGoToBuffer 9<CR>", "goto 9" },
-    c = { "<Cmd>BufferLinePickClose<CR>", "delete buffer" },
+    c = { "<Cmd>BufferLinePickClose<CR>", "close buffer" },
     p = { "<Cmd>BufferLineTogglePin<CR>", "toggle pin" },
     s = { "<Cmd>BufferLinePick<CR>", "pick buffer" },
     t = { "<Cmd>BufferLineGroupToggle docs<CR>", "toggle groups" },
@@ -133,12 +133,6 @@ M.config = function()
     lvim.builtin.which_key.mappings["de"] = { "<cmd>lua require('dapui').eval()<cr>", "Eval" }
     lvim.builtin.which_key.mappings["dU"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" }
   end
-  if lvim.builtin.fancy_diff.active then
-    lvim.builtin.which_key.mappings["gd"] = { "<cmd>DiffviewOpen<cr>", "diffview: diff HEAD" }
-    lvim.builtin.which_key.mappings["gh"] = { "<cmd>DiffviewFileHistory<cr>", "diffview: filehistory" }
-  else
-    lvim.builtin.which_key.mappings["gh"] = { "<cmd>Telescope git_bcommits<cr>", "file history" }
-  end
   lvim.builtin.which_key.mappings["F"] = {
     name = " Find",
     b = { "<cmd>lua require('user.telescope').builtin()<cr>", "Builtin" },
@@ -153,6 +147,14 @@ M.config = function()
     s = { "<cmd>lua require('user.telescope').git_status()<cr>", "Git Status" },
     z = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "Certain Filetype" },
   }
+
+  lvim.builtin.which_key.mappings["gg"] = { "<cmd>lua require 'user.terminal'.lazygit_toggle()<cr>", "Lazygit" }
+  if lvim.builtin.fancy_diff.active then
+    lvim.builtin.which_key.mappings["gd"] = { "<cmd>DiffviewOpen<cr>", "diffview: diff HEAD" }
+    lvim.builtin.which_key.mappings["gh"] = { "<cmd>DiffviewFileHistory<cr>", "diffview: filehistory" }
+  else
+    lvim.builtin.which_key.mappings["gh"] = { "<cmd>Telescope git_bcommits<cr>", "file history" }
+  end
 
   lvim.builtin.which_key.mappings["H"] = " Help"
   lvim.builtin.which_key.mappings["h"] = { "<cmd>nohlsearch<CR>", " No Highlight" }
