@@ -349,17 +349,11 @@ M.config = function()
   -- =========================================
   -- lvim.builtin.telescope.defaults.path_display = { "smart", "absolute", "truncate" }
   lvim.builtin.telescope.defaults.dynamic_preview_title = true
-  lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
+  lvim.builtin.telescope.defaults.path_display = { "smart" }
   lvim.builtin.telescope.defaults.prompt_prefix = "  "
-  -- lvim.builtin.telescope.defaults.borderchars = {
-  --   prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-  --   results = { "─", "▐", "─", "│", "╭", "▐", "▐", "╰" },
-  --   -- results = {' ', '▐', '▄', '▌', '▌', '▐', '▟', '▙' };
-  --   preview = { " ", "│", " ", "▌", "▌", "╮", "╯", "▌" },
-  -- }
   lvim.builtin.telescope.defaults.selection_caret = "  "
   lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 3 }
-  -- lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
+  lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
   lvim.builtin.telescope.defaults.file_ignore_patterns = {
     "vendor/*",
     "%.lock",
@@ -449,7 +443,7 @@ M.config = function()
   lvim.builtin.telescope.pickers.git_files = {
     hidden = true,
     show_untracked = true,
-    layout_strategy = "horizontal",
+    layout_strategy = "flex",
   }
   lvim.builtin.telescope.pickers.live_grep = {
     only_sort_text = true,

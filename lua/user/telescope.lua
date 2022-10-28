@@ -143,7 +143,7 @@ end
 function M.project_search()
   builtin.find_files {
     previewer = false,
-    -- layout_strategy = "vertical",
+    layout_strategy = "vertical",
     cwd = require("lspconfig/util").root_pattern ".git"(vim.fn.expand "%:p"),
   }
 end
