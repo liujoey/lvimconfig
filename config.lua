@@ -23,12 +23,14 @@ lvim.lsp.automatic_servers_installation = false
 
 -- Customization
 -- ==============================================
+lvim.builtin.illuminate.active = false
+lvim.builtin.lir.active = false
 lvim.builtin.tabnine = { active = true }
 lvim.builtin.persistence = { active = true } -- change to false if you don't want persistence
 lvim.builtin.orgmode = { active = true }
 lvim.builtin.dap.active = true
 lvim.builtin.nvimtree.active = false
-lvim.builtin.fancy_wild_menu = { active = false } -- enable/disable cmp-cmdline
+lvim.builtin.fancy_wild_menu = { active = true } -- enable/disable cmp-cmdline
 lvim.builtin.fancy_diff = { active = true } -- enable/disable fancier git diff
 lvim.builtin.lua_dev = { active = true }
 lvim.builtin.neoclip = { active = true, enable_persistent_history = false }
