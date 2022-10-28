@@ -6,7 +6,7 @@ M.config = function()
     popup_border_style = "rounded",
     enable_diagnostics = false,
     source_selector = {
-      winbar = true,
+      winbar = false,
       separator_active = " ",
       statusline = false,
     },
