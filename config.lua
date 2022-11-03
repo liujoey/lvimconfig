@@ -44,6 +44,11 @@ lvim.builtin.tag_provider = "symbols-outline"
 lvim.builtin.dressing = { active = true } -- enable to override vim.ui.input and vim.ui.select with telescope
 lvim.builtin.refactoring = { active = true } -- enable to use refactoring.nvim code_actions
 
+lvim.builtin.go_programming = { active = false } -- gopher.nvim + nvim-dap-go
+lvim.builtin.python_programming = { active = false } -- swenv.nvim + nvim-dap-python
+lvim.builtin.web_programming = { active = false } -- typescript.nvim + package-info.nvim
+lvim.builtin.rust_programming = { active = false } -- rust_tools.nvim + crates.nvim
+
 -- Override Lunarvim defaults
 -- ==============================================
 require("user.builtin").config()

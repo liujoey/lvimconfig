@@ -289,27 +289,27 @@ M.config = function()
   dap.configurations.javascriptreact = dap.configurations.typescript
 
   --Java debugger adapter settings
-  dap.configurations.java = {
-    {
-      name = "Debug (Attach) - Remote",
-      type = "java",
-      request = "attach",
-      hostName = "127.0.0.1",
-      port = 5005,
-    },
-    {
-      name = "Debug (Launch)",
-      type = "java",
-      request = "launch",
-      program = "",
-    },
-    {
-      name = "Debug Non-Project class",
-      type = "java",
-      request = "launch",
-      program = "${file}",
-    },
-  }
+  -- dap.configurations.java = {
+  --   {
+  --     name = "Debug (Attach) - Remote",
+  --     type = "java",
+  --     request = "attach",
+  --     hostName = "127.0.0.1",
+  --     port = 5005,
+  --   },
+  --   {
+  --     name = "Debug (Launch)",
+  --     type = "java",
+  --     request = "launch",
+  --     program = "",
+  --   },
+  --   {
+  --     name = "Debug Non-Project class",
+  --     type = "java",
+  --     request = "launch",
+  --     program = "${file}",
+  --   },
+  -- }
 
   local path = vim.fn.glob(mason_path .. "packages/codelldb/extension/")
     or vim.fn.expand "~/" .. ".vscode/extensions/vadimcn.vscode-lldb-1.8.1/"
@@ -351,7 +351,7 @@ M.config = function()
     python = function() end,
     pythonPath = function()
       local path
-      for _, server in pairs(vim.lsp.buf_get_clients()) do
+      for _, server in pairs(vim.lsp.get_active_clients()) do
         if server.name == "pyright" or server.name == "pylance" then
           path = vim.tbl_get(server, "config", "settings", "python", "pythonPath")
           break

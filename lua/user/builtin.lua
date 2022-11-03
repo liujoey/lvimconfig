@@ -48,7 +48,7 @@ M.config = function()
   local cmp_sources = {
     ["vim-dadbod-completion"] = "(DadBod)",
     buffer = "(Buffer)",
-    cmp_tabnine = "(TabNine)",
+    cmp_tabnine = "(T9)",
     crates = "(Crates)",
     latex_symbols = "(LaTeX)",
     nvim_lua = "(NvLua)",
@@ -111,6 +111,15 @@ M.config = function()
     }
     cmp.setup.cmdline(":", cmdline_opts)
   end
+  cmp.setup.filetype("toml", {
+    sources = cmp.config.sources({
+      { name = "nvim_lsp", max_item_count = 8 },
+      { name = "crates" },
+      { name = "luasnip", max_item_count = 5 },
+    }, {
+      { name = "buffer", max_item_count = 5, keyword_length = 5 },
+    }),
+  })
 
   -- Dap
   -- =========================================
@@ -134,22 +143,25 @@ M.config = function()
 
   -- LSP
   -- =========================================
+  if lvim.builtin.go_programming.active then
+    require("lvim.lsp.manager").setup("golangci_lint_ls", {
+      on_init = require("lvim.lsp").common_on_init,
+      capabilities = require("lvim.lsp").common_capabilities(),
+    })
+  end
+
   lvim.lsp.buffer_mappings.normal_mode["ga"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action" }
-  lvim.lsp.buffer_mappings.normal_mode["gI"] = {
-    "<cmd>lua require('user.telescope').lsp_implementations()<CR>",
-    "Goto Implementation",
-  }
   lvim.lsp.buffer_mappings.normal_mode["gA"] = {
     "<cmd>lua if vim.bo.filetype == 'rust' then vim.cmd[[RustHoverActions]] else vim.lsp.codelens.run() end<CR>",
     "CodeLens Action",
   }
-  lvim.lsp.buffer_mappings.normal_mode["gt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Goto Type Definition" }
-  lvim.lsp.buffer_mappings.normal_mode["gp"] = {
-    function()
-      require("user.peek").Peek "definition"
-    end,
-    "Peek definition",
+  lvim.lsp.buffer_mappings.normal_mode["gI"] = {
+    "<cmd>lua require('user.telescope').lsp_implementations()<CR>",
+    "Goto Implementation",
   }
+  lvim.lsp.buffer_mappings.normal_mode["gt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Goto Type Definition" }
+  lvim.lsp.buffer_mappings.normal_mode["gpd"] = { "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", "Peek definition" }
+  lvim.lsp.buffer_mappings.normal_mode["gpt"] = { "<cmd>lua require('goto-preview').goto_preview_type_definition()<CR>", "Peek type definition" }
   lvim.lsp.buffer_mappings.normal_mode["K"] = {
     "<cmd>lua require('user.builtin').show_documentation()<CR>",
     "Show Documentation",
@@ -231,18 +243,6 @@ M.config = function()
   -- lvim.builtin.theme.options.styles.comments = {}
   lvim.builtin.theme.options.dim_inactive = true
 
-  -- Toggleterm
-  -- =========================================
-  lvim.builtin.terminal.active = true
-  lvim.builtin.terminal.execs = {}
-  lvim.builtin.terminal.autochdir = true
-  lvim.builtin.terminal.open_mapping = nil
-  lvim.builtin.terminal.size = vim.o.columns * 0.4
-  lvim.builtin.terminal.on_config_done = function()
-    M.create_terminal(2, "<c-\\>", 20, "float")
-    M.create_terminal(3, "<A-0>", vim.o.columns * 0.4, "vertical")
-  end
-
   -- Treesitter
   -- =========================================
   local languages = vim.tbl_flatten {
@@ -306,19 +306,6 @@ M.config = function()
         ["as"] = "@statement.outer",
         ["av"] = "@variable.outer",
         ["iv"] = "@variable.inner",
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ["<leader><M-a>"] = "@parameter.inner",
-        ["<leader><M-f>"] = "@function.outer",
-        ["<leader><M-e>"] = "@element",
-      },
-      swap_previous = {
-        ["<leader><M-A>"] = "@parameter.inner",
-        ["<leader><M-F>"] = "@function.outer",
-        ["<leader><M-E>"] = "@element",
       },
     },
     move = {
@@ -607,22 +594,6 @@ M.codes = {
   },
 }
 
---- Create a new toggleterm
----@param num number the terminal number must be > 1
----@param keymap string the keymap to toggle the terminal
----@param size number the size of the terminal
----@param direction string can be 'float','vertical','horizontal'
-M.create_terminal = function(num, keymap, size, direction)
-  local terms = require "toggleterm.terminal"
-  local ui = require "toggleterm.ui"
-  local dir = vim.loop.cwd()
-  vim.keymap.set({ "n", "t" }, keymap, function()
-    local term = terms.get_or_create_term(num, dir, direction)
-    ui.update_origin_window(term.window)
-    term:toggle(size, direction)
-  end, { noremap = true, silent = true })
-end
-
 M.show_documentation = function()
   local filetype = vim.bo.filetype
   if vim.tbl_contains({ "vim", "help" }, filetype) then
@@ -666,7 +637,7 @@ M.lsp_on_attach_callback = function(client, _)
     }
   elseif client.name == "gopls" then
     mappings["H"] = {
-      "<Cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='go vet .;read',count=2,direction='float'})<CR>",
+      "<Cmd>FloatermNew go vet .;read<CR>",
       "Go Vet",
     }
     if lvim.builtin.go_programming.active then
@@ -681,17 +652,20 @@ M.lsp_on_attach_callback = function(client, _)
       mappings["dT"] = { "<cmd>lua require('dap-go').debug_test()<cr>", "Debug Test" }
     end
   elseif client.name == "jdtls" then
-    mappings["rf"] = {
-      "<cmd>lua require('toggleterm.terminal').Terminal:new {cmd='mvn package;read', hidden =false}:toggle()<CR>",
-      "Maven Package",
-    }
-    mappings["mf"] = {
-      "<cmd>lua require('toggleterm.terminal').Terminal:new {cmd='mvn compile;read', hidden =false}:toggle()<CR>",
-      "Maven Compile",
+    mappings["jm"] = {
+      name = "Maven",
+      c = {
+        "<cmd>FloatermNew mvn compile;read<CR>",
+        "Compile",
+      },
+      p = {
+        "<cmd>FloatermNew mvn package;read<CR>",
+        "Package",
+      }
     }
   elseif client.name == "rust_analyzer" then
     mappings["H"] = {
-      "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo clippy;read',count=2,direction='float'})<CR>",
+      "<cmd>FloatermNew cargo clippy;read<CR>",
       "Clippy",
     }
     if lvim.builtin.rust_programming.active then

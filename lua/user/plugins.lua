@@ -287,6 +287,113 @@ M.config = function()
     { "tpope/vim-unimpaired" },
     { "tpope/vim-rsi" },
     { "tpope/vim-surround" },
+    {
+      "olexsmir/gopher.nvim",
+      config = function()
+        require("gopher").setup {
+          commands = {
+            go = "go",
+            gomodifytags = "gomodifytags",
+            gotests = "gotests",
+            impl = "impl",
+            iferr = "iferr",
+          },
+        }
+      end,
+      ft = { "go", "gomod" },
+      event = { "BufRead", "BufNew" },
+      disable = not lvim.builtin.go_programming.active,
+    },
+    {
+      "leoluz/nvim-dap-go",
+      config = function()
+        require("dap-go").setup()
+      end,
+      ft = { "go", "gomod" },
+      event = { "BufRead", "BufNew" },
+      disable = not lvim.builtin.go_programming.active,
+    },
+    {
+      "AckslD/swenv.nvim",
+      ft = "python",
+      event = { "BufRead", "BufNew" },
+      disable = not lvim.builtin.python_programming.active,
+    },
+    {
+      "mfussenegger/nvim-dap-python",
+      config = function()
+        local mason_path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/")
+        require("dap-python").setup(mason_path .. "packages/debugpy/venv/bin/python")
+        require("dap-python").test_runner = "pytest"
+      end,
+      ft = "python",
+      event = { "BufRead", "BufNew" },
+      disable = not lvim.builtin.python_programming.active,
+    },
+    {
+      "jose-elias-alvarez/typescript.nvim",
+      ft = {
+        "javascript",
+        "javascriptreact",
+        "javascript.jsx",
+        "typescript",
+        "typescriptreact",
+        "typescript.tsx",
+      },
+      opt = true,
+      event = { "BufReadPre", "BufNew" },
+      config = function()
+        require("user.tss").config()
+      end,
+      disable = not lvim.builtin.web_programming.active,
+    },
+    {
+      "vuki656/package-info.nvim",
+      config = function()
+        require("package-info").setup()
+      end,
+      opt = true,
+      event = { "BufReadPre", "BufNew" },
+      disable = not lvim.builtin.web_programming.active,
+    },
+    {
+      "mxsdev/nvim-dap-vscode-js",
+      ft = {
+        "javascript",
+        "javascriptreact",
+        "javascript.jsx",
+        "typescript",
+        "typescriptreact",
+        "typescript.tsx",
+      },
+      opt = true,
+      event = { "BufReadPre", "BufNew" },
+      config = function()
+        require("dap-vscode-js").setup {
+          debugger_path = vim.fn.stdpath "data" .. "/mason/packages/js-debug-adapter",
+          debugger_cmd = { "js-debug-adapter" },
+          adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
+        }
+      end,
+      disable = not lvim.builtin.web_programming.active,
+    },
+    {
+      "simrat39/rust-tools.nvim",
+      config = function()
+        require("user.rust_tools").config()
+      end,
+      ft = { "rust", "rs" },
+      disable = not lvim.builtin.rust_programming.active,
+    },
+    {
+      "saecki/crates.nvim",
+      event = { "BufRead Cargo.toml" },
+      requires = { { "nvim-lua/plenary.nvim" } },
+      config = function()
+        require("user.crates").config()
+      end,
+      disable = not lvim.builtin.rust_programming.active,
+    },
     -- TODO: set this up when https://github.com/neovim/neovim/pull/20130 is merged
     -- {
     --   "lvimuser/lsp-inlayhints.nvim",
