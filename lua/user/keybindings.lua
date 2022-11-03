@@ -1,12 +1,7 @@
 local M = {}
 
 M.set_terminal_keymaps = function()
-  local opts = { noremap = true }
-  vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
-  vim.api.nvim_del_keymap("t", "<C-j>")
-  vim.api.nvim_del_keymap("t", "<C-k>")
-  vim.api.nvim_del_keymap("t", "<C-h>")
-  vim.api.nvim_del_keymap("t", "<C-l>")
+  vim.cmd "tmapc"
 end
 
 M.set_lightspeed_keymaps = function()
@@ -41,11 +36,7 @@ M.set_hlslens_keymaps = function()
 end
 
 local function set_bufferline_keymaps()
-  lvim.keys.normal_mode["<S-x>"] = "<Cmd>lua require('user.bufferline').delete_buffer()<CR>"
-  lvim.keys.normal_mode["<S-l>"] = "<Cmd>BufferLineCycleNext<CR>"
-  lvim.keys.normal_mode["<S-h>"] = "<Cmd>BufferLineCyclePrev<CR>"
-  lvim.keys.normal_mode["[b"] = "<Cmd>BufferLineMoveNext<CR>"
-  lvim.keys.normal_mode["]b"] = "<Cmd>BufferLineMovePrev<CR>"
+  lvim.keys.normal_mode["<S-q>"] = "<Cmd>lua require('user.bufferline').delete_buffer()<CR>"
   lvim.builtin.which_key.mappings["c"] = {}
   lvim.builtin.which_key.mappings.b = {
     name = "﩯Buffer",
@@ -88,10 +79,6 @@ M.config = function()
     { noremap = true, silent = true, nowait = true },
   }
   lvim.keys.normal_mode["<BS>"] = ":noh<cr>"
-  lvim.keys.normal_mode["\\"] = "%"
-  lvim.keys.normal_mode["Q"] = ":BufferKill<cr>"
-  lvim.keys.normal_mode["<S-h>"] = "^"
-  lvim.keys.normal_mode["<S-l>"] = "$"
   lvim.keys.normal_mode["<RIGHT>"] = ":BufferLineCycleNext<CR>"
   lvim.keys.normal_mode["<LEFT>"] = ":BufferLineCyclePrev<CR>"
   lvim.keys.normal_mode["<UP>"] = ":tabprevious<CR>"
@@ -131,7 +118,6 @@ M.config = function()
   lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", "舘Dashboard" }
   if lvim.builtin.dap.active then
     lvim.builtin.which_key.mappings["de"] = { "<cmd>lua require('dapui').eval()<cr>", "Eval" }
-    lvim.builtin.which_key.mappings["dU"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" }
   end
   lvim.builtin.which_key.mappings["F"] = {
     name = " Find",
@@ -160,7 +146,8 @@ M.config = function()
   lvim.builtin.which_key.mappings["h"] = { "<cmd>nohlsearch<CR>", " No Highlight" }
   lvim.builtin.which_key.mappings.g.name = " Git"
   lvim.builtin.which_key.mappings.l.name = " LSP"
-  lvim.builtin.which_key.mappings["f"] = {
+  lvim.builtin.which_key.mappings["f"] = nil
+  lvim.builtin.which_key.mappings["<space>"] = {
     require("user.telescope").find_project_files,
     " Find File",
   }
@@ -229,16 +216,6 @@ M.config = function()
   lvim.builtin.which_key.vmappings["g"] = {
     name = " Git",
     s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-  }
-
-  -- Navigate merge conflict markers
-  local whk_status, whk = pcall(require, "which-key")
-  if not whk_status then
-    return
-  end
-  whk.register {
-    ["]n"] = { "[[:call search('^(@@ .* @@|[<=>|]{7}[<=>|]@!)', 'W')<cr>]]", "next merge conflict" },
-    ["[n"] = { "[[:call search('^(@@ .* @@|[<=>|]{7}[<=>|]@!)', 'bW')<cr>]]", "prev merge conflict" },
   }
 end
 
