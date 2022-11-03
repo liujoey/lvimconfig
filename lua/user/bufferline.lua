@@ -189,7 +189,7 @@ M.delete_buffer = function()
   local buflisted = fn.getbufinfo { buflisted = 1 }
   local cur_winnr, cur_bufnr = fn.winnr(), fn.bufnr()
   if #buflisted < 2 then
-    cmd "confirm qall"
+    vim.notify("Can't (Q)uit the last buffer.", vim.log.levels.WARN)
     return
   end
   for _, winid in ipairs(fn.getbufinfo(cur_bufnr)[1].windows) do

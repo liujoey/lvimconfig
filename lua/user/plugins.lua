@@ -60,6 +60,14 @@ M.config = function()
       event = { "BufRead", "BufNew" },
     },
     {
+      "vladdoster/remember.nvim",
+      config = function()
+        require("remember").setup {}
+      end,
+      event = "BufWinEnter",
+      disable = not lvim.builtin.lastplace.active,
+    },
+    {
       "folke/trouble.nvim",
       config = function()
         require("trouble").setup {
@@ -149,6 +157,16 @@ M.config = function()
       disable = not lvim.builtin.orgmode.active,
     },
     {
+      "danymat/neogen",
+      config = function()
+        require("neogen").setup {
+          enabled = true,
+        }
+      end,
+      event = "InsertEnter",
+      requires = "nvim-treesitter/nvim-treesitter",
+    },
+    {
       "AckslD/nvim-neoclip.lua",
       config = function()
         require("user.neoclip").config()
@@ -157,6 +175,13 @@ M.config = function()
       keys = "<leader>y",
       requires = neoclip_req,
       disable = not lvim.builtin.neoclip.active,
+    },
+    {
+      'rmagatti/goto-preview',
+      event = "BufReadPost",
+      config = function()
+        require('goto-preview').setup {}
+      end
     },
     {
       "sindrets/diffview.nvim",
