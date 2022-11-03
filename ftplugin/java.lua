@@ -149,6 +149,7 @@ local config = {
 
 jdtls.start_or_attach(config)
 jdtls.setup_dap { hotcodereplace = "auto" }
+require("user.jdtls").load_launchjs()
 
 vim.cmd "command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)"
 vim.cmd "command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)"
@@ -182,12 +183,12 @@ local vopts = {
 
 local mappings = {
   j = {
-    name = "Java",
+    name = " Java",
     o = { "<Cmd>lua require'jdtls'.organize_imports()<CR>", "Organize Imports" },
     v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
     c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
-    t = { "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", "Test Method" },
-    T = { "<Cmd>lua require'jdtls'.test_class()<CR>", "Test Class" },
+    t = { "<Cmd>lua require'user.jdtls'.start_test('method')<CR>", "Test Method" },
+    T = { "<Cmd>lua require'user.jdtls'.start_test('class')<CR>", "Test Class" },
     u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
   },
 }
