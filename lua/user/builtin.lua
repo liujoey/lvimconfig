@@ -121,6 +121,13 @@ M.config = function()
     }),
   })
 
+  -- Git
+  lvim.builtin.which_key.on_config_done = function(which_key)
+    local mappings = {}
+    mappings["gg"] = { "<cmd>lua require 'user.terminal'.lazygit_toggle()<cr>", "Lazygit" }
+    which_key.register(mappings, lvim.builtin.which_key.opts)
+  end
+
   -- Dap
   -- =========================================
   if lvim.builtin.dap.active then

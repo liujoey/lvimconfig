@@ -134,7 +134,6 @@ M.config = function()
     z = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "Certain Filetype" },
   }
 
-  lvim.builtin.which_key.mappings["gg"] = { "<cmd>lua require 'user.terminal'.lazygit_toggle()<cr>", "Lazygit" }
   if lvim.builtin.fancy_diff.active then
     lvim.builtin.which_key.mappings["gd"] = { "<cmd>DiffviewOpen<cr>", "diffview: diff HEAD" }
     lvim.builtin.which_key.mappings["gh"] = { "<cmd>DiffviewFileHistory<cr>", "diffview: filehistory" }
